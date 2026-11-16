@@ -1,0 +1,18 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/navigation_camera"
+        android:icon="@drawable/ic_camera_foreground"
+        android:title="@string/nav_ar" />
+
+    <item
+        android:id="@+id/navigation_changeobject"
+        android:icon="@drawable/ic_cube"
+        android:title="@string/nav_models" />
+
+    <item
+        android:id="@+id/navigation_garage"
+        android:icon="@drawable/ic_garage"
+        android:title="@string/nav_garage" />
+
+</menu>

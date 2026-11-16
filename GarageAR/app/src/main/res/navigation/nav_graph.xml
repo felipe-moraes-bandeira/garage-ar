@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/navigation_camera">
+
+    <fragment
+        android:id="@+id/navigation_camera"
+        android:name="com.ifpr.androidapptemplatear.ui.CameraFragment"
+        android:label="@string/camera"
+        tools:layout="@layout/fragment_camera" />
+
+    <fragment
+        android:id="@+id/navigation_changeobject"
+        android:name="com.ifpr.androidapptemplatear.ui.ChangeObjectFragment"
+        android:label="@string/change"
+        tools:layout="@layout/fragment_changeobject" />
+
+    <fragment
+        android:id="@+id/navigation_garage"
+        android:name="com.ifpr.androidapptemplatear.ui.GarageFragment"
+        android:label="@string/garage"
+        tools:layout="@layout/fragment_garage">
+        <action
+            android:id="@+id/action_garage_to_detail"
+            app:destination="@id/navigation_vehicle_detail"
+            app:enterAnim="@anim/nav_enter"
+            app:exitAnim="@anim/nav_exit"
+            app:popEnterAnim="@anim/nav_enter"
+            app:popExitAnim="@anim/nav_exit" />
+        <action
+            android:id="@+id/action_garage_to_form"
+            app:destination="@id/navigation_vehicle_form"
+            app:enterAnim="@anim/nav_enter"
+            app:exitAnim="@anim/nav_exit"
+            app:popEnterAnim="@anim/nav_enter"
+            app:popExitAnim="@anim/nav_exit" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/navigation_vehicle_detail"
+        android:name="com.ifpr.androidapptemplatear.ui.VehicleDetailFragment"
+        android:label="@string/vehicle_detail"
+        tools:layout="@layout/fragment_vehicle_detail">
+        <argument
+            android:name="vehicleId"
+            app:argType="long" />
+        <action
+            android:id="@+id/action_detail_to_form"
+            app:destination="@id/navigation_vehicle_form"
+            app:enterAnim="@anim/nav_enter"
+            app:exitAnim="@anim/nav_exit"
+            app:popEnterAnim="@anim/nav_enter"
+            app:popExitAnim="@anim/nav_exit" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/navigation_vehicle_form"
+        android:name="com.ifpr.androidapptemplatear.ui.VehicleFormFragment"
+        android:label="@string/vehicle_form"
+        tools:layout="@layout/fragment_vehicle_form">
+        <argument
+            android:name="vehicleId"
+            android:defaultValue="0L"
+            app:argType="long" />
+        <argument
+            android:name="photoPath"
+            android:defaultValue="@null"
+            app:argType="string"
+            app:nullable="true" />
+    </fragment>
+</navigation>

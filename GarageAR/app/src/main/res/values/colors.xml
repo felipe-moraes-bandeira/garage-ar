@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="papaya">#FF8700</color>
+    <color name="papaya_light">#FFBB66</color>
+    <color name="bg_main">#0A0A0A</color>
+    <color name="bg_card">#151515</color>
+    <color name="bg_surface">#1C1C1C</color>
+    <color name="text_primary">#FFFFFF</color>
+    <color name="text_secondary">#AAAAAA</color>
+    <color name="danger">#FF5252</color>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+</resources>
