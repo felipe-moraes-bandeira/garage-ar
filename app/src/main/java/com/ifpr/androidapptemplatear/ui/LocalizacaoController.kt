@@ -29,6 +29,8 @@ import com.ifpr.androidapptemplatear.game.TouristSpots
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
+import com.ifpr.androidapptemplatear.R
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
@@ -133,6 +135,11 @@ class LocalizacaoController(
         game?.score?.observe(fragment.viewLifecycleOwner) { pontos ->
             placarView?.text = "Pontuação: $pontos"
         }
+        game?.finished?.observe(fragment.viewLifecycleOwner) { encerrada ->
+            if (encerrada) {
+                placarView?.text = "Pontuação final: ${game?.currentScore ?: 0}"
+            }
+        }
 
         owner?.lifecycle?.addObserver(this)
     }
@@ -187,6 +194,10 @@ class LocalizacaoController(
             setTypeface(typeface, Typeface.BOLD)
             setTextColor(Color.parseColor("#FF8700"))
             setPadding(0, dp(6), 0, 0)
+            // Toque na pontuação abre o placar.
+            setOnClickListener {
+                fragment.findNavController().navigate(R.id.navigation_scoreboard)
+            }
         }
 
         eventoView = TextView(context).apply {
@@ -449,8 +460,13 @@ class LocalizacaoController(
     private fun encontrarModelo(lugar: TouristSpot) {
         val jogo = game ?: return
 
+        if (jogo.isFinished) {
+            mostrarEvento("Contagem encerrada. Reinicie no placar para jogar de novo.")
+            return
+        }
+
         if (jogo.isGameOver) {
-            mostrarEvento("Game over. Abra a garagem para iniciar um novo jogo.")
+            mostrarEvento("Game over. Abra o placar para reiniciar.")
             return
         }
 
@@ -461,7 +477,11 @@ class LocalizacaoController(
             return
         }
 
-        jogo.markFound(modelo, lugar.points)
+        jogo.markFound(
+            modelo,
+            lugar.points,
+            "${friendlyModelName(modelo)} em ${lugar.name}"
+        )
 
         mostrarEvento(
             "${lugar.name}: novo modelo ${friendlyModelName(modelo)} (+${lugar.points} pontos)"

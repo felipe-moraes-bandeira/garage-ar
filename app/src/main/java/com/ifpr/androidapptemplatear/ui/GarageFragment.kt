@@ -112,29 +112,16 @@ class GarageFragment : Fragment() {
         val game = GameManager.get(requireContext())
         if (game.isGameOver) {
             binding.subtitle.setText(R.string.game_over_restart)
-            binding.subtitle.setOnClickListener { confirmNewGame() }
         } else {
             binding.subtitle.text = getString(R.string.garage_subtitle_fmt, allVehicles.size) +
                 " • " + getString(R.string.score_fmt, game.currentScore)
-            binding.subtitle.setOnClickListener(null)
-            binding.subtitle.isClickable = false
         }
+        binding.subtitle.setOnClickListener { findNavController().navigate(R.id.navigation_scoreboard) }
         binding.emptyText.visibility = if (shown.isEmpty()) View.VISIBLE else View.GONE
         binding.emptyText.setText(
             if (onlyFavorites && allVehicles.isNotEmpty()) R.string.garage_empty_fav
             else R.string.garage_empty
         )
-    }
-
-    private fun confirmNewGame() {
-        MaterialAlertDialogBuilder(requireContext())
-            .setTitle(R.string.new_game)
-            .setMessage(R.string.new_game_message)
-            .setNegativeButton(R.string.cancel, null)
-            .setPositiveButton(R.string.new_game) { _, _ ->
-                GameManager.get(requireContext()).reset()
-            }
-            .show()
     }
 
     private fun showAddDialog() {

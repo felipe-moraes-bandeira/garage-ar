@@ -79,6 +79,12 @@
     </fragment>
 
     <fragment
+        android:id="@+id/navigation_scoreboard"
+        android:name="com.ifpr.androidapptemplatear.ui.ScoreboardFragment"
+        android:label="@string/scoreboard"
+        tools:layout="@layout/fragment_scoreboard" />
+
+    <fragment
         android:id="@+id/navigation_game_over"
         android:name="com.ifpr.androidapptemplatear.ui.GameOverFragment"
         android:label="@string/game_over_title"

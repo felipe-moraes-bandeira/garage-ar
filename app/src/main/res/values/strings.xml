@@ -66,6 +66,26 @@
     <string name="final_score_fmt">Pontuação atual: %d</string>
     <string name="continue_game">Continuar</string>
     <string name="new_game">Novo jogo</string>
-    <string name="game_over_restart">GAME OVER • toque aqui para um novo jogo</string>
+    <string name="game_over_restart">GAME OVER • toque para abrir o placar</string>
     <string name="new_game_message">A pontuação volta a 100 e os modelos encontrados são zerados. Sua garagem não é apagada.</string>
+    <string name="remove_object">Remover objeto</string>
+    <string name="scoreboard">Placar</string>
+    <string name="scoreboard_status_running">Contagem em andamento</string>
+    <string name="scoreboard_status_finished">Contagem encerrada</string>
+    <string name="scoreboard_status_game_over">Game over</string>
+    <string name="scoreboard_current">Pontuação atual</string>
+    <string name="scoreboard_final">Pontuação final</string>
+    <string name="scoreboard_found_fmt">Modelos encontrados: %1$d de %2$d</string>
+    <string name="scoreboard_dupes_fmt">Carros repetidos: %d</string>
+    <string name="scoreboard_event_header">Evento</string>
+    <string name="scoreboard_points_header">Pontos</string>
+    <string name="scoreboard_empty">Nenhum ponto ainda. Visite um ponto turístico para encontrar um modelo.</string>
+    <string name="finish_count">Encerrar contagem</string>
+    <string name="finish_title">Encerrar a contagem?</string>
+    <string name="finish_message">A pontuação atual vira a pontuação final e nada mais soma nem tira pontos até reiniciar.</string>
+    <string name="restart_all">Reiniciar tudo</string>
+    <string name="restart_title">Reiniciar tudo?</string>
+    <string name="restart_message">A pontuação volta a 100, o histórico e os modelos encontrados são apagados. Sua garagem não é apagada.</string>
+    <string name="event_found_fmt">Novo modelo: %s</string>
+    <string name="event_penalty_fmt">Carro repetido: %s</string>
 </resources>

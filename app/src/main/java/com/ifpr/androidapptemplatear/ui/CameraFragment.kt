@@ -24,7 +24,9 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.ar.core.ArCoreApk
 import com.google.ar.core.Config
 import com.google.ar.core.HitResult
@@ -64,6 +66,9 @@ class CameraFragment : Fragment() {
 
     private var container: FrameLayout? = null
     private var placeButton: ExtendedFloatingActionButton? = null
+    private var removeButton: FloatingActionButton? = null
+    private var scoreboardButton: FloatingActionButton? = null
+    private var objectRemoved = false
     private var statusText: TextView? = null
     private var overlay: View? = null
 
@@ -149,7 +154,20 @@ class CameraFragment : Fragment() {
             }
         }
 
+        removeButton = view.findViewById(R.id.removeObject)
+        scoreboardButton = view.findViewById(R.id.scoreboard)
+        removeButton?.setOnClickListener { removeObjectFromScene() }
+        scoreboardButton?.setOnClickListener {
+            findNavController().navigate(R.id.navigation_scoreboard)
+        }
+
         placeButton?.setOnClickListener {
+            if (objectRemoved) {
+                // "Mostrar objeto": recarrega o modelo atual.
+                loadModel()
+                return@setOnClickListener
+            }
+
             when (mode) {
                 Mode.AR -> placeModel()
 
@@ -172,7 +190,28 @@ class CameraFragment : Fragment() {
             }
 
             placeButton?.bringToFront()
+            removeButton?.bringToFront()
+            scoreboardButton?.bringToFront()
         }
+    }
+
+    /** Tira o objeto da cena (e do ambiente, se já estava fixado). */
+    private fun removeObjectFromScene() {
+        if (sceneView == null) return
+
+        loadJob?.cancel()
+        loadJob = null
+        modelGeneration++
+
+        removeModel()
+        objectRemoved = true
+
+        placeButton?.apply {
+            text = "Mostrar objeto"
+            isEnabled = true
+        }
+
+        statusText?.text = "Objeto removido. Toque em Mostrar objeto para vê-lo de novo."
     }
 
     private fun createControls() {
@@ -369,7 +408,7 @@ class CameraFragment : Fragment() {
                         frame.camera.trackingState ==
                                 TrackingState.TRACKING
 
-                    if (anchorNode == null) {
+                    if (anchorNode == null && !objectRemoved) {
                         placementHit =
                             if (
                                 arTracking &&
@@ -657,6 +696,8 @@ class CameraFragment : Fragment() {
 
         loadJob?.cancel()
         removeModel()
+        objectRemoved = false
+        placeButton?.text = if (mode == Mode.AR) "Posicionar" else "Centralizar"
 
         val expected = generation
         val expectedModel = ++modelGeneration
@@ -819,6 +860,7 @@ class CameraFragment : Fragment() {
 
         arTracking = false
         cameraStreaming = false
+        objectRemoved = false
 
         removeModel()
 
@@ -857,6 +899,8 @@ class CameraFragment : Fragment() {
         overlay = null
         statusText = null
         placeButton = null
+        removeButton = null
+        scoreboardButton = null
         container = null
 
         pendingAr = false

@@ -15,6 +15,9 @@ Garagem virtual automotiva com realidade aumentada (Kotlin, XML, ViewBinding, Na
 - Cadastrar um carro **repetido** (mesma marca, modelo e ano) cancela o cadastro, tira **50 pontos** e abre a tela de **DERROTA**.
 - Pontuação **0 = GAME OVER**; "Novo jogo" reinicia a pontuação e os modelos encontrados (a garagem é mantida).
 - A tela de AR mostra o **endereço atual** e a **pontuação**.
+- Na tela de AR, o botão de lixeira **remove o objeto** da cena ("Mostrar objeto" o traz de volta) e o troféu abre o **Placar**.
+- **Placar:** tabela com cada modelo encontrado (+) e cada carro repetido (−), total, modelos encontrados e repetidos.
+  **Encerrar contagem** congela a pontuação final; **Reiniciar tudo** volta a 100 pontos e apaga o histórico.
 
 ## Observações
 - `esportivo.glb`, `suv.glb` e `picape.glb` são placeholders low-poly gerados por script.

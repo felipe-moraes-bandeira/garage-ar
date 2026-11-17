@@ -164,14 +164,14 @@ class VehicleFormFragment : Fragment() {
                     findNavController().popBackStack()
                 }
 
-                vehicle.id != 0L -> {
+                vehicle.id != 0L || GameManager.get(requireContext()).isFinished -> {
                     binding.saveButton.isEnabled = true
                     binding.layoutModel.error = getString(R.string.duplicate_vehicle)
                 }
 
                 else -> {
                     // A foto não foi salva (saved = false): onDestroyView a apaga.
-                    val score = GameManager.get(requireContext()).penalizeDuplicate()
+                    val score = GameManager.get(requireContext()).penalizeDuplicate(vehicle.fullName)
                     findNavController().navigate(
                         R.id.action_form_to_game_over,
                         bundleOf("score" to score, "vehicleName" to vehicle.fullName)

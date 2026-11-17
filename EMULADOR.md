@@ -32,3 +32,7 @@ pontos turísticos em ordem e aplica as regras do jogo, sem precisar mexer no GP
 1. Garagem → **Adicionar** → escolha uma foto → preencha marca/modelo/ano → **Salvar**.
 2. Repita com **a mesma marca, modelo e ano** → tela de **DERROTA** (−50 pontos, cadastro cancelado).
 3. Com a pontuação em 0 aparece **GAME OVER**; **Novo jogo** volta para 100 pontos.
+
+## Placar
+Na tela de AR, toque no troféu (ou na pontuação) para abrir o placar. Use **Encerrar contagem** para congelar
+a pontuação final e **Reiniciar tudo** para começar de novo. O botão de lixeira remove o objeto 3D da cena.
