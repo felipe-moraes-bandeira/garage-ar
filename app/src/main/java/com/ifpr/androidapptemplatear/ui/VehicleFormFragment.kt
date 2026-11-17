@@ -10,7 +10,8 @@ import android.location.LocationManager
 import android.os.Bundle
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
-import androidx.core.location.LocationManagerCompat
+import android.location.LocationListener
+import android.os.Looper
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.util.Locale
@@ -48,6 +49,7 @@ class VehicleFormFragment : Fragment() {
 
     /** Posição onde o cadastro está sendo feito. */
     private var location: Location? = null
+    private var locationListener: LocationListener? = null
 
     private val locationPermission =
         registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { result ->
@@ -150,16 +152,39 @@ class VehicleFormFragment : Fragment() {
                 return
             }
 
-            LocationManagerCompat.getCurrentLocation(
-                manager, provider, null, ContextCompat.getMainExecutor(ctx)
-            ) { fresh ->
-                if (_binding == null) return@getCurrentLocation
-                if (fresh != null) onLocation(fresh)
-                else if (location == null) binding.locationStatus.setText(R.string.location_missing)
+            // Posição atual: uma única atualização, com prazo de 20 s.
+            stopLocationUpdates()
+            val listener = object : LocationListener {
+                override fun onLocationChanged(fresh: Location) {
+                    stopLocationUpdates()
+                    onLocation(fresh)
+                }
+
+                override fun onProviderEnabled(provider: String) = Unit
+                override fun onProviderDisabled(provider: String) = Unit
+
+                @Deprecated("Callback utilizado em versões antigas do Android")
+                override fun onStatusChanged(provider: String?, status: Int, extras: Bundle?) = Unit
             }
+            locationListener = listener
+            manager.requestLocationUpdates(provider, 0L, 0f, listener, Looper.getMainLooper())
+
+            binding.root.postDelayed({
+                if (locationListener === listener) {
+                    stopLocationUpdates()
+                    if (location == null) _binding?.locationStatus?.setText(R.string.location_missing)
+                }
+            }, 20_000L)
         } catch (e: SecurityException) {
             binding.locationStatus.setText(R.string.location_denied)
         }
+    }
+
+    private fun stopLocationUpdates() {
+        val listener = locationListener ?: return
+        locationListener = null
+        val manager = context?.getSystemService(Context.LOCATION_SERVICE) as? LocationManager
+        runCatching { manager?.removeUpdates(listener) }
     }
 
     private fun onLocation(loc: Location) {
@@ -302,6 +327,7 @@ class VehicleFormFragment : Fragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
+        stopLocationUpdates()
         _binding = null
         // Cadastro cancelado: apaga a foto que ficou órfã (exceto em rotação de tela).
         if (!saved && vehicleId == 0L && !requireActivity().isChangingConfigurations) {
