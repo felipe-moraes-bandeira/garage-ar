@@ -5,49 +5,29 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    tools:context=".ui.CameraFragment">
 
-    <io.github.sceneview.ar.ArSceneView
-        android:id="@+id/sceneView"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent" />
-
-    <TextView
-        android:id="@+id/modelName"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:background="@drawable/bg_pill"
-        android:drawableStart="@drawable/ic_cube"
-        android:drawablePadding="8dp"
-        android:drawableTint="@color/papaya"
-        android:gravity="center_vertical"
-        android:paddingHorizontal="16dp"
-        android:paddingVertical="8dp"
-        android:textColor="@color/text_primary"
-        android:textSize="15sp"
-        android:textStyle="bold"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        tools:text="Esportivo" />
-
-    <TextView
-        android:id="@+id/hint"
+    <!-- Receberá o ArSceneView ou o SceneView criado pelo fragmento. -->
+    <FrameLayout
+        android:id="@+id/sceneContainer"
         android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <ImageView
+        android:id="@+id/titleImage"
+        android:layout_width="150dp"
         android:layout_height="wrap_content"
-        android:layout_marginHorizontal="24dp"
-        android:layout_marginBottom="12dp"
-        android:background="@drawable/bg_pill"
-        android:paddingHorizontal="16dp"
-        android:paddingVertical="10dp"
-        android:text="@string/ar_hint"
-        android:textAlignment="center"
-        android:textColor="@color/text_secondary"
-        android:textSize="12sp"
-        app:layout_constraintBottom_toTopOf="@id/place"
+        android:layout_marginTop="10dp"
+        android:adjustViewBounds="true"
+        android:background="@android:color/transparent"
+        android:contentDescription="@string/app_name"
+        android:scaleType="centerInside"
+        android:src="@mipmap/ic_launcher_round"
+        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
@@ -55,11 +35,11 @@
         android:id="@+id/place"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
-        android:text="@string/place"
+        android:layout_marginBottom="10dp"
+        android:enabled="false"
+        android:text="Posicionar"
         android:textAlignment="center"
         android:textSize="15sp"
-        app:backgroundTint="@color/papaya"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />

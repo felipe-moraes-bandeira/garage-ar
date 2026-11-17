@@ -6,7 +6,11 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import androidx.fragment.app.Fragment
+import androidx.core.os.bundleOf
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.lifecycleScope
+import kotlinx.coroutines.launch
+import com.ifpr.androidapptemplatear.game.GameManager
 import androidx.navigation.fragment.findNavController
 import com.ifpr.androidapptemplatear.R
 import com.ifpr.androidapptemplatear.data.Drivetrain
@@ -136,9 +140,44 @@ class VehicleFormFragment : Fragment() {
             isFavorite = switchFavorite.isChecked,
             createdAt = old?.createdAt ?: System.currentTimeMillis()
         )
-        saved = true
-        viewModel.save(vehicle)
-        findNavController().popBackStack()
+        confirmAndSave(vehicle)
+        }
+    }
+
+    /**
+     * Confirmação do cadastro: se já existe o mesmo carro (marca + modelo + ano),
+     * novo cadastro perde pontos e abre a tela de derrota; edição só mostra o erro.
+     */
+    private fun confirmAndSave(vehicle: Vehicle) {
+        binding.saveButton.isEnabled = false
+
+        viewLifecycleOwner.lifecycleScope.launch {
+            val duplicate = viewModel.isDuplicate(
+                vehicle.brand, vehicle.model, vehicle.year, excludeId = vehicle.id
+            )
+            if (_binding == null) return@launch
+
+            when {
+                !duplicate -> {
+                    saved = true
+                    viewModel.save(vehicle)
+                    findNavController().popBackStack()
+                }
+
+                vehicle.id != 0L -> {
+                    binding.saveButton.isEnabled = true
+                    binding.layoutModel.error = getString(R.string.duplicate_vehicle)
+                }
+
+                else -> {
+                    // A foto não foi salva (saved = false): onDestroyView a apaga.
+                    val score = GameManager.get(requireContext()).penalizeDuplicate()
+                    findNavController().navigate(
+                        R.id.action_form_to_game_over,
+                        bundleOf("score" to score, "vehicleName" to vehicle.fullName)
+                    )
+                }
+            }
         }
     }
 

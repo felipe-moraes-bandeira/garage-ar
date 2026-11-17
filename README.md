@@ -2,20 +2,20 @@
 
 Garagem virtual automotiva com realidade aumentada (Kotlin, XML, ViewBinding, Navigation Component, Room, SceneView/ARCore).
 
-## O que foi feito sobre o projeto-base
-- **Navegação inferior:** Realidade Aumentada · Modelos · Minha Garagem (Navigation Component).
-- **Minha Garagem:** grade responsiva de cartões, filtro de favoritos, cadastro por câmera ou galeria.
-- **Cadastro/edição/detalhes/exclusão** com marca, modelo, ano, motorização, cv, torque, tração, raridade, local, observações e favorito.
-- **Persistência:** Room (`garage_ar.db`) + fotos em `filesDir/vehicle_photos` (armazenamento interno).
-- **AR:** mantida a implementação com `ArModelNode`; agora com mover/girar/redimensionar, botão Posicionar/Reposicionar e nome do modelo.
-- **Modelos:** lista os `.glb` de `assets/` e permite importar/remover `.glb` do aparelho.
-- **Tema:** escuro, laranja papaya (#FF8700), cartões arredondados.
+## Funcionalidades
+- **Minha Garagem:** cadastro por câmera/galeria, edição, exclusão e favoritos (Room + fotos no armazenamento interno).
+- **Modelos:** lista os `.glb` de `assets/` e permite importar/remover `.glb`.
+- **Realidade Aumentada:** ARCore em celular compatível; modo de visualização 3D no emulador (veja `EMULADOR.md`).
+- **Localização (branch `feature-location`):** endereço atual e pontos turísticos de Ponta Grossa.
 
-## Correções do projeto-base
-- `nav_graph.xml` apontava para `ProfileFragment`/`fragment_profile`, que não existem.
-- `CameraFragment`: `lateinit modelNode` causava crash ao tocar em "Place" antes de carregar; a permissão de câmera
-  era pedida via `requireActivity()` e o resultado nunca chegava ao fragment; `super.onCreate` era chamado em `onCreateView`.
+## Jogo (branch `feature-location-score`)
+- Começa com **100 pontos**.
+- Chegar a até 100 m de um ponto turístico revela um modelo **ainda não encontrado** e soma os pontos do local
+  (`game/TouristSpots.kt`: Catedral Sant'Ana, Igreja dos Polacos, Estação Ferroviária, Buraco do Padre, Parque de Vila Velha).
+- Cadastrar um carro **repetido** (mesma marca, modelo e ano) cancela o cadastro, tira **50 pontos** e abre a tela de **DERROTA**.
+- Pontuação **0 = GAME OVER**; "Novo jogo" reinicia a pontuação e os modelos encontrados (a garagem é mantida).
+- A tela de AR mostra o **endereço atual** e a **pontuação**.
 
-## Modelos 3D
-`esportivo.glb`, `suv.glb` e `picape.glb` são **placeholders low-poly** gerados por script. Para modelos reais, coloque
-arquivos `.glb` em `app/src/main/assets/` (ou importe pelo app).
+## Observações
+- `esportivo.glb`, `suv.glb` e `picape.glb` são placeholders low-poly gerados por script.
+- Para trocar os locais, edite apenas `game/TouristSpots.kt`.

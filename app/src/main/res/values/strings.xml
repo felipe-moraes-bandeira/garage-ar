@@ -56,4 +56,16 @@
     <string name="notes">Observações</string>
     <string name="not_informed">Não informado</string>
     <string name="back">Voltar</string>
+    <string name="duplicate_vehicle">Este carro (marca, modelo e ano) já está na garagem</string>
+    <string name="score_fmt">Pontuação: %d</string>
+    <string name="game_over_title">Derrota</string>
+    <string name="defeat_title">DERROTA</string>
+    <string name="game_over_banner">GAME OVER</string>
+    <string name="defeat_message">%1$s já está na sua garagem! Você perdeu %2$d pontos e o cadastro foi cancelado.</string>
+    <string name="game_over_message">Sua pontuação chegou a zero. Reinicie para jogar de novo; sua garagem continua salva.</string>
+    <string name="final_score_fmt">Pontuação atual: %d</string>
+    <string name="continue_game">Continuar</string>
+    <string name="new_game">Novo jogo</string>
+    <string name="game_over_restart">GAME OVER • toque aqui para um novo jogo</string>
+    <string name="new_game_message">A pontuação volta a 100 e os modelos encontrados são zerados. Sua garagem não é apagada.</string>
 </resources>

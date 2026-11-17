@@ -18,6 +18,13 @@ interface VehicleDao {
     @Query("SELECT * FROM vehicles WHERE id = :id")
     suspend fun getById(id: Long): Vehicle?
 
+    /** Quantos outros veículos têm a mesma marca, modelo e ano (ignorando maiúsculas). */
+    @Query(
+        "SELECT COUNT(*) FROM vehicles WHERE LOWER(TRIM(brand)) = LOWER(TRIM(:brand)) " +
+            "AND LOWER(TRIM(model)) = LOWER(TRIM(:model)) AND year = :year AND id != :excludeId"
+    )
+    suspend fun countSame(brand: String, model: String, year: Int, excludeId: Long): Int
+
     @Insert
     suspend fun insert(vehicle: Vehicle): Long
 

@@ -21,6 +21,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.ifpr.androidapptemplatear.R
 import com.ifpr.androidapptemplatear.data.PhotoStorage
+import com.ifpr.androidapptemplatear.game.GameManager
 import com.ifpr.androidapptemplatear.data.Vehicle
 import com.ifpr.androidapptemplatear.databinding.FragmentGarageBinding
 import kotlinx.coroutines.launch
@@ -101,18 +102,39 @@ class GarageFragment : Fragment() {
             allVehicles = list
             render()
         }
+        GameManager.get(requireContext()).score.observe(viewLifecycleOwner) { render() }
     }
 
     private fun render() {
         val onlyFavorites = binding.chipFavorites.isChecked
         val shown = if (onlyFavorites) allVehicles.filter { it.isFavorite } else allVehicles
         adapter.submitList(shown)
-        binding.subtitle.text = getString(R.string.garage_subtitle_fmt, allVehicles.size)
+        val game = GameManager.get(requireContext())
+        if (game.isGameOver) {
+            binding.subtitle.setText(R.string.game_over_restart)
+            binding.subtitle.setOnClickListener { confirmNewGame() }
+        } else {
+            binding.subtitle.text = getString(R.string.garage_subtitle_fmt, allVehicles.size) +
+                " • " + getString(R.string.score_fmt, game.currentScore)
+            binding.subtitle.setOnClickListener(null)
+            binding.subtitle.isClickable = false
+        }
         binding.emptyText.visibility = if (shown.isEmpty()) View.VISIBLE else View.GONE
         binding.emptyText.setText(
             if (onlyFavorites && allVehicles.isNotEmpty()) R.string.garage_empty_fav
             else R.string.garage_empty
         )
+    }
+
+    private fun confirmNewGame() {
+        MaterialAlertDialogBuilder(requireContext())
+            .setTitle(R.string.new_game)
+            .setMessage(R.string.new_game_message)
+            .setNegativeButton(R.string.cancel, null)
+            .setPositiveButton(R.string.new_game) { _, _ ->
+                GameManager.get(requireContext()).reset()
+            }
+            .show()
     }
 
     private fun showAddDialog() {

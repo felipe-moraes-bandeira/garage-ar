@@ -23,6 +23,9 @@ class GarageViewModel(app: Application) : AndroidViewModel(app) {
         }
     }
 
+    suspend fun isDuplicate(brand: String, model: String, year: Int, excludeId: Long = 0L): Boolean =
+        dao.countSame(brand, model, year, excludeId) > 0
+
     fun toggleFavorite(vehicle: Vehicle) {
         viewModelScope.launch { dao.setFavorite(vehicle.id, !vehicle.isFavorite) }
     }
