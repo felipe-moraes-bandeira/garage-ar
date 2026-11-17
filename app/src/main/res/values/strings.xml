@@ -88,4 +88,16 @@
     <string name="restart_message">A pontuação volta a 100, o histórico e os modelos encontrados são apagados. Sua garagem não é apagada.</string>
     <string name="event_found_fmt">Novo modelo: %s</string>
     <string name="event_penalty_fmt">Carro repetido: %s</string>
+    <string name="map">Mapa</string>
+    <string name="map_title">Mapa dos carros</string>
+    <string name="map_empty">Nenhum carro com localização ainda. Cadastre um carro com a localização ligada.</string>
+    <string name="map_details">Detalhes</string>
+    <string name="map_hint">Toque em um marcador para ver o carro</string>
+    <string name="see_on_map">Ver no mapa</string>
+    <string name="use_my_location">Usar minha localização</string>
+    <string name="location_getting">Obtendo localização…</string>
+    <string name="location_ok_fmt">Localização registrada (precisão ~%d m)</string>
+    <string name="location_missing">Sem localização. Toque em "Usar minha localização".</string>
+    <string name="location_denied">Permissão de localização negada. O carro ficará fora do mapa.</string>
+    <string name="location_off">Ative a localização do aparelho.</string>
 </resources>

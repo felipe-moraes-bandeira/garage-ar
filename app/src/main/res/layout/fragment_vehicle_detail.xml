@@ -166,10 +166,24 @@
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/mapButton"
+                android:layout_width="match_parent"
+                android:layout_height="52dp"
+                android:layout_marginTop="16dp"
+                android:text="@string/see_on_map"
+                android:textColor="@color/black"
+                android:textStyle="bold"
+                android:visibility="gone"
+                app:backgroundTint="@color/papaya"
+                app:cornerRadius="14dp"
+                app:icon="@drawable/ic_map"
+                app:iconTint="@color/black" />
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
+                android:layout_marginTop="12dp"
                 android:orientation="horizontal">
 
                 <com.google.android.material.button.MaterialButton

@@ -30,6 +30,13 @@
             app:popEnterAnim="@anim/nav_enter"
             app:popExitAnim="@anim/nav_exit" />
         <action
+            android:id="@+id/action_garage_to_map"
+            app:destination="@id/navigation_map"
+            app:enterAnim="@anim/nav_enter"
+            app:exitAnim="@anim/nav_exit"
+            app:popEnterAnim="@anim/nav_enter"
+            app:popExitAnim="@anim/nav_exit" />
+        <action
             android:id="@+id/action_garage_to_form"
             app:destination="@id/navigation_vehicle_form"
             app:enterAnim="@anim/nav_enter"
@@ -46,6 +53,13 @@
         <argument
             android:name="vehicleId"
             app:argType="long" />
+        <action
+            android:id="@+id/action_detail_to_map"
+            app:destination="@id/navigation_map"
+            app:enterAnim="@anim/nav_enter"
+            app:exitAnim="@anim/nav_exit"
+            app:popEnterAnim="@anim/nav_enter"
+            app:popExitAnim="@anim/nav_exit" />
         <action
             android:id="@+id/action_detail_to_form"
             app:destination="@id/navigation_vehicle_form"
@@ -76,6 +90,17 @@
             app:exitAnim="@anim/nav_exit"
             app:popUpTo="@id/navigation_vehicle_form"
             app:popUpToInclusive="true" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/navigation_map"
+        android:name="com.ifpr.androidapptemplatear.ui.MapFragment"
+        android:label="@string/map_title"
+        tools:layout="@layout/fragment_map">
+        <argument
+            android:name="focusVehicleId"
+            android:defaultValue="0L"
+            app:argType="long" />
     </fragment>
 
     <fragment

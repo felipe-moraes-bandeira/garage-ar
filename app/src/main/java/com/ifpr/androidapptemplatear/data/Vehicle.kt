@@ -19,7 +19,12 @@ data class Vehicle(
     val foundLocation: String = "",
     val notes: String = "",
     val isFavorite: Boolean = false,
+    /** Onde o carro foi cadastrado (null se a localização não estava disponível). */
+    val latitude: Double? = null,
+    val longitude: Double? = null,
     val createdAt: Long = System.currentTimeMillis()
 ) {
     val fullName: String get() = "$brand $model"
+
+    val hasLocation: Boolean get() = latitude != null && longitude != null
 }

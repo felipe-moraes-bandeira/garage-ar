@@ -1,6 +1,19 @@
 package com.ifpr.androidapptemplatear.ui
 
+import android.Manifest
+import android.annotation.SuppressLint
+import android.content.Context
+import android.content.pm.PackageManager
+import android.location.Geocoder
+import android.location.Location
+import android.location.LocationManager
 import android.os.Bundle
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.content.ContextCompat
+import androidx.core.location.LocationManagerCompat
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
+import java.util.Locale
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -32,6 +45,16 @@ class VehicleFormFragment : Fragment() {
     private var photoPath: String? = null
     private var existing: Vehicle? = null
     private var saved = false
+
+    /** Posição onde o cadastro está sendo feito. */
+    private var location: Location? = null
+
+    private val locationPermission =
+        registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { result ->
+            if (result.values.any { it }) fetchLocation() else {
+                _binding?.locationStatus?.setText(R.string.location_denied)
+            }
+        }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
@@ -75,6 +98,100 @@ class VehicleFormFragment : Fragment() {
         }
 
         binding.saveButton.setOnClickListener { save() }
+
+        binding.locationButton.setOnClickListener { requestLocation() }
+        if (isEditing) {
+            binding.locationStatus.setText(R.string.location_missing)
+        } else {
+            requestLocation()
+        }
+    }
+
+    private fun requestLocation() {
+        val ctx = requireContext()
+        val granted = listOf(
+            Manifest.permission.ACCESS_FINE_LOCATION,
+            Manifest.permission.ACCESS_COARSE_LOCATION
+        ).any { ContextCompat.checkSelfPermission(ctx, it) == PackageManager.PERMISSION_GRANTED }
+
+        if (granted) {
+            fetchLocation()
+        } else {
+            locationPermission.launch(
+                arrayOf(
+                    Manifest.permission.ACCESS_FINE_LOCATION,
+                    Manifest.permission.ACCESS_COARSE_LOCATION
+                )
+            )
+        }
+    }
+
+    @SuppressLint("MissingPermission")
+    private fun fetchLocation() {
+        val ctx = requireContext()
+        val manager = ctx.getSystemService(Context.LOCATION_SERVICE) as LocationManager
+        binding.locationStatus.setText(R.string.location_getting)
+
+        try {
+            // Última posição conhecida: resposta imediata enquanto a posição atual não chega.
+            listOf(
+                LocationManager.GPS_PROVIDER,
+                LocationManager.NETWORK_PROVIDER,
+                LocationManager.PASSIVE_PROVIDER
+            ).mapNotNull { runCatching { manager.getLastKnownLocation(it) }.getOrNull() }
+                .maxByOrNull { it.time }
+                ?.let { onLocation(it) }
+
+            val provider = listOf(LocationManager.GPS_PROVIDER, LocationManager.NETWORK_PROVIDER)
+                .firstOrNull { runCatching { manager.isProviderEnabled(it) }.getOrDefault(false) }
+
+            if (provider == null) {
+                if (location == null) binding.locationStatus.setText(R.string.location_off)
+                return
+            }
+
+            LocationManagerCompat.getCurrentLocation(
+                manager, provider, null, ContextCompat.getMainExecutor(ctx)
+            ) { fresh ->
+                if (_binding == null) return@getCurrentLocation
+                if (fresh != null) onLocation(fresh)
+                else if (location == null) binding.locationStatus.setText(R.string.location_missing)
+            }
+        } catch (e: SecurityException) {
+            binding.locationStatus.setText(R.string.location_denied)
+        }
+    }
+
+    private fun onLocation(loc: Location) {
+        if (_binding == null) return
+        location = loc
+        binding.locationStatus.text = getString(
+            R.string.location_ok_fmt, if (loc.hasAccuracy()) loc.accuracy.toInt() else 0
+        )
+
+        // Se "Local onde foi encontrado" está vazio, sugere o endereço da posição.
+        if (binding.inputLocation.text.isNullOrBlank()) {
+            val appContext = requireContext().applicationContext
+            viewLifecycleOwner.lifecycleScope.launch {
+                val address = withContext(Dispatchers.IO) {
+                    try {
+                        if (!Geocoder.isPresent()) null else {
+                            @Suppress("DEPRECATION")
+                            Geocoder(appContext, Locale("pt", "BR"))
+                                .getFromLocation(loc.latitude, loc.longitude, 1)
+                                ?.firstOrNull()?.getAddressLine(0)
+                        }
+                    } catch (e: Exception) {
+                        null
+                    }
+                }
+                if (_binding != null && !address.isNullOrBlank() &&
+                    binding.inputLocation.text.isNullOrBlank()
+                ) {
+                    binding.inputLocation.setText(address)
+                }
+            }
+        }
     }
 
     private fun showPhoto() {
@@ -138,6 +255,8 @@ class VehicleFormFragment : Fragment() {
             foundLocation = inputLocation.text.toString().trim(),
             notes = inputNotes.text.toString().trim(),
             isFavorite = switchFavorite.isChecked,
+            latitude = location?.latitude ?: old?.latitude,
+            longitude = location?.longitude ?: old?.longitude,
             createdAt = old?.createdAt ?: System.currentTimeMillis()
         )
         confirmAndSave(vehicle)

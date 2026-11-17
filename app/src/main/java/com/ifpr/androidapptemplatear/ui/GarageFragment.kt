@@ -96,6 +96,9 @@ class GarageFragment : Fragment() {
         binding.vehicleList.adapter = adapter
 
         binding.chipFavorites.setOnCheckedChangeListener { _, _ -> render() }
+        binding.chipMap.setOnClickListener {
+            findNavController().navigate(R.id.action_garage_to_map, bundleOf("focusVehicleId" to 0L))
+        }
         binding.addButton.setOnClickListener { showAddDialog() }
 
         viewModel.vehicles.observe(viewLifecycleOwner) { list ->

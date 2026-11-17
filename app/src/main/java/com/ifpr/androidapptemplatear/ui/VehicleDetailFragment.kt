@@ -48,6 +48,14 @@ class VehicleDetailFragment : Fragment() {
                 )
             }
         }
+        binding.mapButton.setOnClickListener {
+            current?.let {
+                findNavController().navigate(
+                    R.id.action_detail_to_map,
+                    bundleOf("focusVehicleId" to it.id)
+                )
+            }
+        }
         binding.deleteButton.setOnClickListener { current?.let { confirmDelete(it) } }
 
         viewModel.vehicle(id).observe(viewLifecycleOwner) { v ->
@@ -78,6 +86,8 @@ class VehicleDetailFragment : Fragment() {
         addSpec(getString(R.string.field_hp), if (v.horsepower > 0) "${v.horsepower} cv" else "")
         addSpec(getString(R.string.field_torque), v.torque)
         addSpec(getString(R.string.field_drivetrain), v.drivetrain)
+
+        mapButton.visibility = if (v.hasLocation) View.VISIBLE else View.GONE
 
         notesCard.visibility = if (v.notes.isBlank()) View.GONE else View.VISIBLE
         notes.text = v.notes

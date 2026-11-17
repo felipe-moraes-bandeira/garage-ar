@@ -36,3 +36,8 @@ pontos turísticos em ordem e aplica as regras do jogo, sem precisar mexer no GP
 ## Placar
 Na tela de AR, toque no troféu (ou na pontuação) para abrir o placar. Use **Encerrar contagem** para congelar
 a pontuação final e **Reiniciar tudo** para começar de novo. O botão de lixeira remove o objeto 3D da cena.
+
+## Mapa no emulador
+1. Defina a posição em **Extended controls → Location** *antes* de cadastrar o carro.
+2. Cadastre o carro (a tela do formulário pede a permissão e mostra "Localização registrada").
+3. Garagem → **Mapa**. O emulador precisa de internet para baixar os tiles do mapa.

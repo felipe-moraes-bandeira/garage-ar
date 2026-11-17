@@ -8,6 +8,13 @@ Garagem virtual automotiva com realidade aumentada (Kotlin, XML, ViewBinding, Na
 - **Realidade Aumentada:** ARCore em celular compatível; modo de visualização 3D no emulador (veja `EMULADOR.md`).
 - **Localização (branch `feature-location`):** endereço atual e pontos turísticos de Ponta Grossa.
 
+## Mapa dos carros
+- Ao cadastrar um carro, o app guarda a posição (permissão de localização) e sugere o endereço no campo "Local".
+  O botão **Usar minha localização** refaz a leitura (também na edição).
+- Garagem → chip **Mapa**: marcadores de todos os carros; tocar em um mostra o cartão com **Detalhes**.
+  Nos detalhes do carro, **Ver no mapa** centraliza nele. Mapa OpenStreetMap (osmdroid), sem chave de API; precisa de internet.
+- Carros cadastrados antes dessa versão continuam na garagem, mas sem marcador (banco migrado da v1 para a v2).
+
 ## Jogo (branch `feature-location-score`)
 - Começa com **100 pontos**.
 - Chegar a até 100 m de um ponto turístico revela um modelo **ainda não encontrado** e soma os pontos do local
